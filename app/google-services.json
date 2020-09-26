@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "665873299983",
+    "firebase_url": "https://drawapp-f5e34.firebaseio.com",
+    "project_id": "drawapp-f5e34",
+    "storage_bucket": "drawapp-f5e34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665873299983:android:c4e97a489a6e41d1b9417a",
+        "android_client_info": {
+          "package_name": "com.basant.drawapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665873299983-c6u4e80o8opkp7a058vqppn2oi17bob2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc93LW5vOIF7lADaANHNMgBdaeuIBL5b8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665873299983-c6u4e80o8opkp7a058vqppn2oi17bob2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

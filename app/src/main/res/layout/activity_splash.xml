@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ligth_brown"
+    tools:context="helper.SplashActivity">
+    <com.agrawalsuneet.dotsloader.loaders.TashieLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tashieloader_animDelay="200"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:tashieloader_animDur="1000"
+        app:tashieloader_dotsColor="@color/dark_green"
+        app:tashieloader_dotsDist="5dp"
+        app:tashieloader_dotsRadius="20dp"
+        app:tashieloader_interpolator="@android:anim/accelerate_interpolator"
+        app:tashieloader_noOfDots="6" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to_drawapp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/brown"
+        android:layout_below="@+id/loader"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/drawing_is_an_art"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

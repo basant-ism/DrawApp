@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created BASANT KUMAR on 11/09/2020 09:04 AM
+  ~ Copyright @2020. All rights reserved
+  ~ Last modified: 11/09/2020 09:04 AM
+  ~ Without "BASANT KUMAR" permission no one able to access this code.
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<solid android:color="@color/pta_nhi"/>
+<corners
+    android:radius="10dp"/>
+
+
+</shape>
