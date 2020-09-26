@@ -51,13 +51,28 @@
                     />
             </LinearLayout>
         </RelativeLayout>
-        <custum_views.PaintView
-            android:layout_below="@+id/seek_bar_relative_layout"
-            android:id="@+id/paint_view"
-            android:layout_width="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_height="match_parent"
-            />
+
+
+            <LinearLayout
+                android:id="@+id/draw_liear_layout"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/seek_bar_relative_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_height="match_parent"
+                >
+                <custum_views.PaintView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/draw_view"
+                    />
+            </LinearLayout>
+
+
+
+
+
+
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/color_linear_layout"

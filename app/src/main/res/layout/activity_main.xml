@@ -37,7 +37,7 @@
                     android:contentDescription="@string/brush"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/border"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="9dp"
                     />
                 <ImageButton
                     android:id="@+id/btn_erase"
@@ -49,7 +49,7 @@
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/erase"
                     android:background="@android:color/transparent"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="9dp"
                     />
                 <ImageButton
                     android:id="@+id/btn_save"
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_save"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="9dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/save"
                     />
@@ -67,9 +67,29 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_rotation"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="9dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/rotation"
+                    />
+                <ImageButton
+                    android:id="@+id/btn_redo"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_redo"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="9dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/redo"
+                    />
+                <ImageButton
+                    android:id="@+id/btn_undo"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_undo"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="9dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/undo"
                     />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

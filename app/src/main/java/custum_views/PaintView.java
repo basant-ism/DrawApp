@@ -1,8 +1,9 @@
 package custum_views;
 
+import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
-
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,116 +15,213 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 
 import androidx.annotation.Nullable;
 
-public class PaintView
-        extends View {
-    private Path path=new Path();
-    private Paint drawPaint=new Paint(),canvasPaint=new Paint();
+import com.basant.drawapp.R;
 
-    private boolean isClear=false;
+import helper.Helper;
 
+public class PaintView extends View  {
+    private Canvas  mCanvas;
+    private Path    mPath;
+    private Paint   mPaint;
+    boolean isClear=false;
+
+    private ArrayList<Helper> paths = new ArrayList<Helper>();
+    private ArrayList<Helper> undonePaths = new ArrayList<Helper>();
     private int brushColor= Color.BLACK;
-    private float brushSize=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10,getResources().getDisplayMetrics());;
-    private Bitmap mbitmap;
-    private Canvas canvas;
+    private float brushSize=10f;
+
+    private Bitmap bitmap;
 
     public PaintView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        Log.d("TAG","paint");
-        setUpDrawing();
+        setFocusable(true);
+        setFocusableInTouchMode(true);
     }
-
-    public void initailize(float brushSize,int color)
+    public void  initialize(boolean isClear,int color,float brushSize)
     {
-        this.brushSize=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,brushSize,getResources().getDisplayMetrics());;
-        brushColor=color;
+        this.isClear=isClear;
+        brushColor= color;
+        this.brushSize=brushSize;
+
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(brushColor);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(brushSize);
+        mCanvas = new Canvas();
+        mPath = new Path();
+        Log.d("TAG","contsxt");
+
+
     }
     public void setEraser(boolean isClear)
     {
         this.isClear=isClear;
         if(isClear)
         {
-            drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            mPaint.setColor(Color.WHITE);
         }
         else{
-            drawPaint.setXfermode(null);
+
         }
     }
-    public void setBrushSize(float newSize)
+    public void setColor(String newColor)
     {
-        float pixelAmount= TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,newSize,getResources().getDisplayMetrics());
-        brushSize=pixelAmount;
-        drawPaint.setStrokeWidth(brushSize);
-    }
+        invalidate();
+        mPath.reset();
+        brushColor=Color.parseColor(newColor);
+        mPaint.setColor(brushColor);
 
-    public int getBrushColor()
-    {
-        return brushColor;
-    }
-    public float getBrushSize()
-    {
-        return  brushSize;
+
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mbitmap=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
-        canvas=new Canvas(mbitmap);
+        bitmap=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+        mCanvas=new Canvas(bitmap);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.drawBitmap(mbitmap,0,0,canvasPaint);
-        canvas.drawPath(path,drawPaint);
+
+        int i=0;
+        for (Helper p : paths){
+
+            Paint paint=p.getPaint();
+            paint.setStrokeWidth(p.getBrushSize());
+
+            if(p.isClear())
+            {
+                paint.setColor(Color.WHITE);
+            }
+            else{
+                paint.setColor(p.getColor());
+            }
+            canvas.drawPath(p.getPath(), paint);
+        }
+        canvas.drawPath(mPath, mPaint);
     }
+
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE = 4;
+
+    private void touchStart(float x, float y) {
+        mPaint.setColor(brushColor);
+        mPaint.setStrokeWidth(brushSize);
+        if(isClear)
+        {
+            mPaint.setColor(Color.WHITE);
+        }
+        undonePaths.clear();
+        mPath.reset();
+        mPath.moveTo(x, y);
+        mX = x;
+        mY = y;
+    }
+    private void touchMove(float x, float y) {
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
+            mX = x;
+            mY = y;
+        }
+    }
+    private void touchUp() {
+        mPath.lineTo(mX, mY);
+
+
+        mCanvas.drawPath(mPath, mPaint);
+        Helper helper=new Helper();
+
+        helper.setPath(mPath);
+        helper.setPaint(mPaint);
+        helper.setBrushSize(brushSize);
+        if(isClear)
+        {
+            helper.setClear(true);
+            helper.setColor(Color.WHITE);
+        }
+        else
+        {
+            helper.setClear(false);
+            helper.setColor(brushColor);
+        }
+
+        paths.add(helper);
+        mPath = new Path();
+
+    }
+
+    public void onClickUndo () {
+        if (paths.size()>0)
+        {
+            undonePaths.add(paths.remove(paths.size()-1));
+            invalidate();
+        }
+
+
+    }
+
+    public void onClickRedo (){
+        if (undonePaths.size()>0)
+        {
+            paths.add(undonePaths.remove(undonePaths.size()-1));
+            invalidate();
+        }
+
+
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float pointX=event.getX();
-        float pointY=event.getY();
+        float x = event.getX();
+        float y = event.getY();
 
-        switch (event.getAction())
-        {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                path.moveTo(pointX,pointY);
+                Log.d("TAG","down");
+                touchStart(x, y);
+                invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                path.lineTo(pointX,pointY);
+                Log.d("TAG","move");
+                touchMove(x, y);
+                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                canvas.drawPath(path,drawPaint);
-                path.reset();
+                Log.d("TAG","up");
+                touchUp();
+                invalidate();
                 break;
-            default:
-                return false;
         }
-        invalidate();
         return true;
-    }
 
-    public Bitmap getBitmap()
-    {
-        return mbitmap;
     }
-    public void setUpDrawing()
-    {
-        path=new Path();
-        drawPaint=new Paint();
-        drawPaint.setAntiAlias(true);
-        drawPaint.setColor(brushColor);
-        drawPaint.setStyle(Paint.Style.STROKE);
-        drawPaint.setStrokeJoin(Paint.Join.ROUND);
-        drawPaint.setStrokeCap(Paint.Cap.ROUND);
-        drawPaint.setStrokeWidth(brushSize);
-    }
-    public void setColor(String newColor)
-    {
-        invalidate();
-        brushColor=Color.parseColor(newColor);
-        drawPaint.setColor(brushColor);
-    }
+public Bitmap getBitmap()
+{
+    return  bitmap;
 }
+    public int getBrushColor() {
+        return brushColor;
+    }
+    public void setBrushSize(float newSize)
+    {
 
+        invalidate();
+        float pixelAmount= TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,newSize,getResources().getDisplayMetrics());
+        brushSize=pixelAmount;
+        mPaint.setStrokeWidth(brushSize);
+
+    }
+
+
+}

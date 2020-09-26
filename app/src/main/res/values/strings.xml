@@ -36,4 +36,6 @@
     <string name="logout">logout</string>
     <string name="paintings">Paintings</string>
     <string name="my_paintings">My paintings</string>
+    <string name="redo">Redo</string>
+    <string name="undo">Undo</string>
 </resources>

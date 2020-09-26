@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void rotate() {
         androidx.appcompat.app.AlertDialog.Builder builder=new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setMessage("You will loss your painting?");
+        builder.setMessage("You shall loss your painting?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
                 }
             }
         }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -202,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 transaction1.replace(R.id.fragment_container,new MyPaintingsFragment());
                 transaction1.addToBackStack(null).commit();
                 toolbar.setTitle("My Paintings");
-                iconLinearLayout.setVisibility(View.INVISIBLE);
+                iconLinearLayout.setVisibility(View.GONE);
                 FRAGMENT_NUMBER=2;
                 break;
             case R.id.nav_all_paintings:
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FragmentTransaction transaction2= getSupportFragmentManager().beginTransaction();
                 transaction2.replace(R.id.fragment_container,new AllPaintingsFragmant());
                 transaction2.addToBackStack(null).commit();
-                iconLinearLayout.setVisibility(View.INVISIBLE);
+                iconLinearLayout.setVisibility(View.GONE);
                 FRAGMENT_NUMBER=3;
                 break;
         }

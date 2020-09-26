@@ -43,11 +43,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import custum_views.PaintView;
 import model.User;
 public class DrawFragment extends Fragment implements View.OnClickListener {
     LinearLayout colorLinearLayout;
     public static ImageButton currentColor;
-    custum_views.PaintView paintView;
+
+    PaintView paintView;
     SeekBar seekBar;
     BrushPaintView brushPaintView;
 
@@ -83,7 +85,22 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
         db=FirebaseFirestore.getInstance();
         mStoreRef= FirebaseStorage.getInstance().getReference();
 
+        view.findViewById(R.id.draw_liear_layout).setBackgroundColor(Color.WHITE);
+
         getUsername();
+
+        getActivity().findViewById(R.id.btn_undo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paintView.onClickUndo();
+            }
+        });
+        getActivity().findViewById(R.id.btn_redo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paintView.onClickRedo();
+            }
+        });
 
         getActivity().findViewById(R.id.btn_brush).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +109,6 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
                 getActivity().findViewById(R.id.btn_erase).setBackground(null);
                 getActivity().findViewById(R.id.btn_save).setBackground(null);
                 paintView.setEraser(false);
-                paintView.setUpDrawing();
-
             }
         });
         getActivity().findViewById(R.id.btn_erase).setOnClickListener(new View.OnClickListener() {
@@ -103,10 +118,7 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
                 getActivity().findViewById(R.id.btn_brush).setBackground(null);
                 getActivity().findViewById(R.id.btn_save).setBackground(null);
                 getActivity().findViewById(R.id.btn_erase).setPadding(8,8,8,8);
-
                 paintView.setEraser(true);
-                paintView.setBrushSize(paintView.getBrushSize());
-
             }
 
         });
@@ -132,22 +144,15 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
                 dialog.show();
             }
         });
-
-        paintView=view.findViewById(R.id.paint_view);
+        paintView=view.findViewById(R.id.draw_view);
         brushPaintView=view.findViewById(R.id.brush_paint_view);
         seekBar=view.findViewById(R.id.seek_bar);
 
-        if(savedInstanceState==null)
-        {
-            brushPaintView.initailize(INITIAL_BRUSH_SIZE,INITIAL_BRUSH_COLOR);
-            brushPaintView.setDrawing();
-
-            paintView.initailize(INITIAL_BRUSH_SIZE,INITIAL_BRUSH_COLOR);
-            paintView.setUpDrawing();
-
-            seekBar.setMax(50);
-            seekBar.setProgress((int)INITIAL_BRUSH_SIZE);
-        }
+        paintView.initialize(false,INITIAL_BRUSH_COLOR,INITIAL_BRUSH_SIZE);
+        brushPaintView.initailize(INITIAL_BRUSH_SIZE,INITIAL_BRUSH_COLOR);
+        brushPaintView.setDrawing();
+        seekBar.setMax(50);
+        seekBar.setProgress((int)INITIAL_BRUSH_SIZE);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -158,12 +163,10 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
                 brushPaintView.setDrawing();
                 paintView.setBrushSize(i);
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -189,8 +192,7 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
             currentColor=(ImageButton) colorLinearLayout.getChildAt(0);
             currentColor.setBackground(getActivity().getDrawable(R.drawable.border));
             currentColor.setPadding(10,10,10,10);
-            paintView.setColor(currentColor.getTag().toString());
-            paintView.setUpDrawing();
+
         }
 
         return view;
@@ -296,4 +298,5 @@ public class DrawFragment extends Fragment implements View.OnClickListener {
             brushPaintView.setDrawing();
         }
     }
+
 }
